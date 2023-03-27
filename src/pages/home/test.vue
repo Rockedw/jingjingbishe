@@ -37,7 +37,9 @@
     <div class="steps-content" v-if="current===0">
       <h3>场景选择</h3>
       {{ steps[current].content }}
-       <a-form
+
+
+      <a-form
     :model="formState"
     name="validate_other"
     v-bind="formItemLayout"
@@ -52,8 +54,8 @@
       :rules="[{ required: true, message: 'Please select a scenario!' }]"
     >
       <a-select v-model:value="formState.select" placeholder="Please select a scenario">
-        <a-select-option value="健身">健身</a-select-option>
-        <a-select-option value="空调">空调</a-select-option>
+        <a-select-option value="jianshen">健身</a-select-option>
+        <a-select-option value="kongtiao">空调</a-select-option>
       </a-select>
     </a-form-item>
 
@@ -81,6 +83,27 @@
     <div class="steps-content" v-if="current===1">
       <h3>模型构建</h3>
       {{ steps[current].content }}
+      <div v-if="formState.select==='jianshen'">
+        <h3>健身</h3>
+      <a-list>
+        <a-list-item>
+            <img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
+        </a-list-item>
+    </a-list>
+
+        
+
+      </div>
+      <div v-if="formState.select==='kongtiao'">
+        <h3>空调</h3>
+        <a-list>
+        <a-list-item v-for="(image_path, index) in image_paths" :key="index">    
+            <img alt="example" :src="image_path.path" />
+            image_path.path
+        </a-list-item>
+      </a-list>
+      </div>
+
     </div>
     <div class="steps-content" v-if="current===2">
       <h3>智能决策</h3>
@@ -132,6 +155,7 @@ export default defineComponent({
       'input-number': 3,
       'checkbox-group': ['A', 'B'],
       rate: 3.5,
+      select: '',
     });
     const onFinish = values => {
       console.log('Success:', values);
@@ -139,7 +163,24 @@ export default defineComponent({
     const onFinishFailed = errorInfo => {
       console.log('Failed:', errorInfo);
     };
-    return {
+    // 一个图片地址字典
+    const image_paths = [
+      {
+        title: '初始目标',
+        path: '/img/建模图/输入/初始目标.png',
+      },
+       {
+        title: '初始问题图',
+        path: '/img/建模图/输入/初始问题图.png',
+      }, {
+        title: '环境模型图',
+        path: '/img/建模图/输入/环境模型图.png',
+      }, {
+        title: '适应性需求模型',
+        path: '/img/建模图/输出适应性需求模型.png',
+      }
+    ];
+      return {
       message,
       current,
       steps: [{
@@ -158,6 +199,7 @@ export default defineComponent({
       onFinish,
       onFinishFailed,
       formItemLayout,
+      image_paths,
     };
   },
 });
